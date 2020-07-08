@@ -6,6 +6,7 @@
 const createServer = require("./src/createServer")
 const createClientApp = require("./src/createClientApp")
 const startAllServers = require('./src/startAllServers')
+const StateManager = require("./src/stateManager")
 
 const defaultConfigs = {
   version: "1.0.0",
@@ -16,7 +17,7 @@ function Pipes(config) {
   
   const conf = { ...defaultConfigs, ...config }
 
-  this.state = {},
+  this.stateManager = {},
   this.events = {},
 
   this.servers = [];
@@ -40,13 +41,14 @@ function Pipes(config) {
       registerServer(createServer({ ...config, pipes: { ...conf } })),
     client: (config) =>
       registerClient(createClientApp({ ...config, pipes: { ...conf } })),
-    useContext: (state) => (this.state = { ...this.state, state }),
-    start: () => startAllServers(allApps(), this.state, conf),
+    useContext: (state) => (this.stateManager = new StateManager(state)),
+    getContext: () => this.stateManager.getState(),
+    start: () => startAllServers(allApps(), this.stateManager, conf),
     apps: () => allApps(),
     registerEvents: (eventMap) => {
       this.events = eventMap;
     },
-    events: () => this.events
+    events: () => this.events,
   });
 
   return _buildObj();

@@ -1,14 +1,17 @@
-const { HELLO } = require("./actions");
+const { HELLO, PIPE_MODIFY } = require("./actions");
 
-const handle = (action) => {
+const handle = (action, stateManager) => {
   switch (action.type) {
     case HELLO:
       console.log(`Hello Recieved from [${action.payload.client_id}]`);
-      console.log(`LocalHandler for HELLO event please!!!`);
       break;
+    case PIPE_MODIFY:
+      stateManager.update({
+        [action.payload.target]: action.payload.value,
+      });
+      break
     default:
-      console.log(`Unknown Action [No Handler '${action.type}']`);
-      console.log(action)
+      console.log(`Unknown Action [No Handler '${action.type}']`, action);
   }
 };
 

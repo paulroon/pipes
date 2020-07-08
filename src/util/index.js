@@ -25,11 +25,15 @@ const sendToClient = (data, ws) =>
   )
 
 // Broadcast a message to all connected clients (observing excluded clients) 
-const broadcast = (data, wss, exclude) =>
-  filter(
+const broadcast = (data, wss, exclude) => {
+  if (!exclude) {
+    exclude = []
+  }
+  return filter(
     getOpenClients(wss),
     (client) => !exclude || !exclude.includes(client)
   ).forEach((client) => sendToClient(data, client));
+}
 
 module.exports = {
   filter,

@@ -1,12 +1,17 @@
 const createWebSocketServer = require("./createWebSocketServer");
 
-module.exports = (apps, sharedState, conf) => {
+module.exports = (apps, stateManager, conf) => {
   // Make a Global SocketServer
-  const { wss: pipesSocketServer, server } = createWebSocketServer(sharedState);
+  const socketServer = createWebSocketServer(
+    stateManager
+  );
+  const { wss: pipesSocketServer, server } = socketServer;
+
+  stateManager.setSocketServer(socketServer);
 
   apps.forEach((app) => {
     // register the websocket in the app
-    app.registerWss(pipesSocketServer)
+    app.registerWss(pipesSocketServer);
 
     // start the server
     app.start();
