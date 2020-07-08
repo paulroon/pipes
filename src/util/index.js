@@ -1,3 +1,5 @@
+const WebSocket = require("ws");
+
 // Utility
 //
 // - Needed because:
@@ -12,6 +14,26 @@ const filter = (arr, matcher) => {
   return coll;
 };
 
+// Currently connected Clients
+const getOpenClients = (wss) => filter(wss.clients, (client) => client.readyState === WebSocket.OPEN)
+
+// Send Data (string or action Object) 
+// to a specific client 
+const sendToClient = (data, ws) => 
+  ws.send(
+    (typeof data === 'string') ? data : JSON.stringify(data, null, 2)
+  )
+
+// Broadcast a message to all connected clients (observing excluded clients) 
+const broadcast = (data, wss, exclude) =>
+  filter(
+    getOpenClients(wss),
+    (client) => !exclude || !exclude.includes(client)
+  ).forEach((client) => sendToClient(data, client));
+
 module.exports = {
-    filter
-}
+  filter,
+  getOpenClients,
+  sendToClient,
+  broadcast
+};

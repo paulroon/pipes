@@ -17,6 +17,8 @@ function Pipes(config) {
   const conf = { ...defaultConfigs, ...config }
 
   this.state = {},
+  this.events = {},
+
   this.servers = [];
   this.clients = [];
 
@@ -41,6 +43,10 @@ function Pipes(config) {
     useContext: (state) => (this.state = { ...this.state, state }),
     start: () => startAllServers(allApps(), this.state, conf),
     apps: () => allApps(),
+    registerEvents: (eventMap) => {
+      this.events = eventMap;
+    },
+    events: () => this.events
   });
 
   return _buildObj();
