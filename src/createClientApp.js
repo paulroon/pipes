@@ -10,16 +10,16 @@ const createClientApp = (config) => {
 
   const appId = "_" + Math.random().toString(36).substr(2, 9);
   const server = express()
-
+  
   server.use(express.static(conf.path))
 
   server.use(function(req, res, next){
-    console.log("A new request received at " + Date.now());
+    console.log(`New client [${appId}] request received at ${Date.now()}`);
     next();
   });
 
   const startup = (s) => s.listen(conf.port, () => {
-      console.log(`${conf.name} [Server] is listening on port:${conf.port}`)
+      console.log(`[${conf.name}] is listening on port:${conf.port}`);
       console.log(`- http://localhost:${conf.port}`)
     })
 

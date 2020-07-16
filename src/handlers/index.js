@@ -1,4 +1,5 @@
 
 module.exports = {
-  incomingClientMessageHandler: require('./incomingClientMessage')
+  incomingClientMessageHandler: require("./incomingClientMessage"),
+  clientDisconnectHandler: require("./clientDisconnect"),
 };

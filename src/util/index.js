@@ -1,4 +1,5 @@
 const WebSocket = require("ws");
+const { hasKey, ensureKey } = require('./objectHelpers')
 
 // Utility
 //

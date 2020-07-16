@@ -1,23 +1,30 @@
 const createWebSocketServer = require("./createWebSocketServer");
 
-module.exports = (apps, stateManager, conf) => {
+module.exports = (apps, stateManager, serverListeners, conf) => {
+  const startSocket = !!stateManager
+
   // Make a Global SocketServer
-  const socketServer = createWebSocketServer(
-    stateManager
-  );
-  const { wss: pipesSocketServer, server } = socketServer;
+  if (startSocket) {
+    const socketServer = createWebSocketServer(stateManager, serverListeners);
+    const { wss: pipesSocketServer, server } = socketServer
 
-  stateManager.setSocketServer(socketServer);
+    stateManager.setPublisher(socketServer)
+    
+    apps.forEach((app) => {
+      // register the websocket in the app
+      if (startSocket) {
+        app.registerWss(pipesSocketServer);
+      }
 
-  apps.forEach((app) => {
-    // register the websocket in the app
-    app.registerWss(pipesSocketServer);
+      // start the server
+      app.start();
+    });
 
-    // start the server
-    app.start();
-  });
+    server.listen(conf.socketPort, () => {
+      console.log(`pipesSocketServer: Listening on ${conf.socketPort}`);
+    });
 
-  server.listen(conf.socketPort, () => {
-    console.log(`pipesSocketServer: Listening on ${conf.socketPort}`);
-  });
+  } else {
+    apps.forEach((app) => app.start());
+  }
 };

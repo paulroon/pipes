@@ -1,8 +1,18 @@
-// Actions
-const HELLO = "HELLO";
-const INIT_APP_PIPESTATE = "INIT_APP_PIPESTATE";
-const UPDATE_APP_PIPESTATE = "UPDATE_APP_PIPESTATE";
-const PIPE_MODIFY = "PIPE_MODIFY";
+const {
+  HELLO,
+  INIT_APP_PIPESTATE,
+  UPDATE_APP_PIPESTATE,
+  PIPE_MODIFY,
+  PIPE_MODIFY_CLIENT,
+  PEER_ACTION,
+  WELCOME
+} = require("./constants");
+
+const wrapPeerEvent = (clientId, action) => ({
+  type: PEER_ACTION,
+  clientId: clientId,
+  event: action,
+});
 
 // Action Creators
 const initialiseAppPipeState = (state) => ({
@@ -13,13 +23,23 @@ const initialiseAppPipeState = (state) => ({
 const updateAppPipeState = (state) => ({
   type: UPDATE_APP_PIPESTATE,
   payload: state,
-});
+})
+
+const createWelcomeMessage = clientId => ({
+  type: WELCOME, 
+  payload: {
+    clientId
+  }
+})
 
 module.exports = {
   HELLO,
   INIT_APP_PIPESTATE,
   UPDATE_APP_PIPESTATE,
   PIPE_MODIFY,
+  PIPE_MODIFY_CLIENT,
   initialiseAppPipeState,
-  updateAppPipeState
+  updateAppPipeState,
+  createWelcomeMessage,
+  wrapPeerEvent,
 };

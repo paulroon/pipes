@@ -1,22 +1,47 @@
 const handle = require("../handle");
-const { broadcast } = require("../util");
+const { TYPE_CLIENT_ACTION, HELLO, WELCOME } = require("../constants");
+const { createWelcomeMessage } = require("../actions");
+const { sendToClient } = require("../util");
 
-const incomingClientMessageHandler = (wss, client, stateManager) => messsage => {
+const isIncomingMessageValid = (mssg) => mssg.type === TYPE_CLIENT_ACTION;
+const isClientHandshake = (mssg) => mssg.type === HELLO;
+
+const incomingClientMessageHandler = (
+  wss,
+  client,
+  stateManager,
+  serverListeners
+) => (messsage) => {
   // dispatch to main handle
-  const action = JSON.parse(messsage);
-  if (Object.hasOwnProperty.call(action, "type")) {
-    // pipes is now in change of this event
+  const mssg = JSON.parse(messsage);
 
-    // run middleware on event (registered as part of pipe setup)
+  if (isClientHandshake(mssg)) {
+    console.log(`Hello Recieved from [${client.id}]`);
 
-    // run event handlers (registered as part of pipe setup)
-    // perform any state changes
+    // let the client know its Id
+    sendToClient(createWelcomeMessage(client.id), client);
 
-    handle(action, stateManager);
+    // register _generic namespace
+    // TODO - just store this in the stateManager as 'this.clients'
+    const currentState = stateManager.getState();
+    stateManager.update({
+      _generic: {
+        ...currentState._generic,
+        [client.id]: {
+          connectedAt: new Date(),
+        },
+      },
+    });
+    return;
   }
 
-  // Broadcast original to every open client
-  // broadcast(messsage, wss, []);
+  if (!isIncomingMessageValid(mssg)) {
+    return;
+  }
+
+  // run event handlers (registered as part of pipe setup)
+  // perform any state changes
+  handle(wss, mssg.event, stateManager, client, serverListeners);
 };
 
 module.exports = incomingClientMessageHandler
