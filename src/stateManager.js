@@ -9,6 +9,7 @@ const { updateAppPipeState } = require('./actions')
 function StateManager(state) {
     this.state = state
     this.publishers = []
+    this.clients = []
 
     const updateState = (newState) =>
         (this.state = { ...this.state, ...newState })
@@ -17,6 +18,9 @@ function StateManager(state) {
         const deltaAction = updateAppPipeState(this.state)
         this.publishers.forEach((pub) => pub.publish(deltaAction))
       }
+
+    const addClient = (clientId) => (this.clients = [...this.clients, clientId])
+    const getClients = () => this.clients
     
     return {
       getState: () => ({ ...this.state }),
@@ -25,6 +29,8 @@ function StateManager(state) {
         updateState(stateDiff);
         publish();
       },
+      addClient,
+      getClients
     };
 }
 

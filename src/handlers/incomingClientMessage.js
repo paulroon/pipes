@@ -21,17 +21,7 @@ const incomingClientMessageHandler = (
     // let the client know its Id
     sendToClient(createWelcomeMessage(client.id), client);
 
-    // register _generic namespace
-    // TODO - just store this in the stateManager as 'this.clients'
-    const currentState = stateManager.getState();
-    stateManager.update({
-      _generic: {
-        ...currentState._generic,
-        [client.id]: {
-          connectedAt: new Date(),
-        },
-      },
-    });
+    const currentState = stateManager.addClient(client.id)
     return;
   }
 
