@@ -5,6 +5,7 @@ const createClientApp = (config) => {
   const conf = {
     port: 3000,
     name: "Client App",
+    isSPA: true, // Single Page Apps only require a root route
     ...config
   };
 
@@ -17,6 +18,12 @@ const createClientApp = (config) => {
     console.log(`New client [${appId}] request received at ${Date.now()}`);
     next();
   });
+
+  if (conf.isSPA) {
+      server.get("/*", (req, res) => {
+          res.redirect("/")
+      })
+  }
 
   const startup = (s) => s.listen(conf.port, () => {
       console.log(`[${conf.name}] is listening on port:${conf.port}`);
