@@ -21,7 +21,7 @@ const createClientApp = (config) => {
 
   if (conf.isSPA) {
       server.get("/*", (req, res) => {
-          res.redirect("/")
+          res.sendFile(conf.path + "/index.html")
       })
   }
 

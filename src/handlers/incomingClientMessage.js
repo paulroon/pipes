@@ -16,12 +16,16 @@ const incomingClientMessageHandler = (
   const mssg = JSON.parse(messsage);
 
   if (isClientHandshake(mssg)) {
-    console.log(`Hello Recieved from [${client.id}]`);
+
+    if (mssg.payload.user) {
+      client.user = mssg.payload.user
+    }
+    console.log(`Hello Recieved from [${client.user.id}]`)
 
     // let the client know its Id
-    sendToClient(createWelcomeMessage(client.id), client);
+    sendToClient(createWelcomeMessage(client.user), client)
 
-    const currentState = stateManager.addClient(client.id)
+    stateManager.addClient(client.user.id)
     return;
   }
 

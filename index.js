@@ -6,6 +6,7 @@
 const createServer = require("./src/createServer")
 const createClientApp = require("./src/createClientApp")
 const startAllServers = require('./src/startAllServers')
+const emit = require('./src/util/emit')
 const StateManager = require("./src/stateManager")
 
 const defaultConfigs = {
@@ -63,7 +64,8 @@ function Pipes(config) {
     start: () =>
       startAllServers(allApps(), this.stateManager, this.listeners, conf),
     apps: () => allApps(),
-    listen,
+    intercept: listen,
+    emit,
   });
 
   return _buildObj();

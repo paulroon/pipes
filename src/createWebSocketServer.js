@@ -18,8 +18,13 @@ module.exports = function CreateWebSocketServer(stateManager, serverListeners) {
 
   // Relay all clients to each other
   wss.on("connection", (ws) => {
-    // add identifier
-    ws.id = uuid.v4();
+
+    // add base user / identifier
+    // this will eitheer be augmented / used by the client app 
+    // or replaced by a pre-existing version from local storage
+    ws.user = {
+        id: uuid.v4()
+    }
 
     // Welcome Message Initialise's PipeState in App
     sendToClient(initialiseAppPipeState(stateManager.getState()), ws);

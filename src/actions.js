@@ -3,7 +3,6 @@ const {
   INIT_APP_PIPESTATE,
   UPDATE_APP_PIPESTATE,
   PIPE_MODIFY,
-  PIPE_MODIFY_CLIENT,
   PEER_ACTION,
   WELCOME
 } = require("./constants");
@@ -25,11 +24,11 @@ const updateAppPipeState = (state) => ({
   payload: state,
 })
 
-const createWelcomeMessage = clientId => ({
-  type: WELCOME, 
-  payload: {
-    clientId
-  }
+const createWelcomeMessage = (user) => ({
+    type: WELCOME,
+    payload: {
+        user,
+    },
 })
 
 module.exports = {
@@ -37,7 +36,6 @@ module.exports = {
   INIT_APP_PIPESTATE,
   UPDATE_APP_PIPESTATE,
   PIPE_MODIFY,
-  PIPE_MODIFY_CLIENT,
   initialiseAppPipeState,
   updateAppPipeState,
   createWelcomeMessage,

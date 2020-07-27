@@ -1,9 +1,6 @@
 
 const clientDisconnectHandler = (wss, client, stateManager) => {
-  //   stateManager.update({
-
-  //   })
-  console.log("clientDisconnectHandler.. here");
+  console.log(`User Disconnected [${client.user.id}]`)
 };
 
 module.exports = clientDisconnectHandler;
