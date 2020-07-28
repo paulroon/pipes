@@ -5,23 +5,22 @@ module.exports = (apps, stateManager, serverListeners, conf) => {
 
   // Make a Global SocketServer
   if (startSocket) {
-    const socketServer = createWebSocketServer(stateManager, serverListeners);
-    const { wss: pipesSocketServer, server } = socketServer
+    const socketServer = createWebSocketServer(
+        stateManager,
+        serverListeners,
+        conf
+    )
 
     stateManager.setPublisher(socketServer)
     
     apps.forEach((app) => {
       // register the websocket in the app
       if (startSocket) {
-        app.registerWss(pipesSocketServer);
+        app.registerWss(socketServer.wss)
       }
 
       // start the server
       app.start();
-    });
-
-    server.listen(conf.socketPort, () => {
-      console.log(`pipesSocketServer: Listening on ${conf.socketPort}`);
     });
 
   } else {

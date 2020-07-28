@@ -1,6 +1,5 @@
 const express = require("express")
 const WebSocket = require("ws")
-const http = require("http");
 const uuid = require("uuid");
 const { initialiseAppPipeState } = require('./actions')
 const {
@@ -9,10 +8,11 @@ const {
 } = require("./handlers");
 const { sendToClient, broadcast } = require("./util")
 
-module.exports = function CreateWebSocketServer(stateManager, serverListeners) {
-  // Create a WebSocketServer
-  const server = http.createServer(express);
-  wss = new WebSocket.Server({ server });
+module.exports = function CreateWebSocketServer(stateManager, serverListeners, wsConfig) {
+  wss = new WebSocket.Server({
+      port: wsConfig.socketPort,
+      path: wsConfig.socketPath
+  })
 
   const emitAll = (data, exclude) => broadcast(data, wss, exclude);
 
@@ -20,10 +20,12 @@ module.exports = function CreateWebSocketServer(stateManager, serverListeners) {
   wss.on("connection", (ws) => {
 
     // add base user / identifier
-    // this will eitheer be augmented / used by the client app 
+    // this will either be augmented / used by the client app 
     // or replaced by a pre-existing version from local storage
+    //
+    // @todo - set a keypair and make the id the pubkey [for encrypted messaging]
     ws.user = {
-        id: uuid.v4()
+        id: uuid.v4() 
     }
 
     // Welcome Message Initialise's PipeState in App
@@ -41,7 +43,6 @@ module.exports = function CreateWebSocketServer(stateManager, serverListeners) {
   });
 
   return {
-    server,
     publish: emitAll,
     sendToClient,
   };

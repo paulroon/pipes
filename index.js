@@ -10,8 +10,9 @@ const emit = require('./src/util/emit')
 const StateManager = require("./src/stateManager")
 
 const defaultConfigs = {
-  version: "1.0.0",
-  socketPort: 1234
+    version: "1.0.0",
+    socketPort: 1234,
+    socketPath: "/happy-pipe",
 }
 
 function Pipes(config) {
