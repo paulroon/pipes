@@ -22,10 +22,11 @@ const incomingClientMessageHandler = (
     }
     console.log(`Hello Recieved from [${client.user.id}]`)
 
+    stateManager.addClient(client.user.id)
+    
     // let the client know its Id
     sendToClient(createWelcomeMessage(client.user), client)
 
-    stateManager.addClient(client.user.id)
     return;
   }
 

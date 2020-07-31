@@ -19,7 +19,7 @@ function StateManager(state) {
         this.publishers.forEach((pub) => pub.publish(deltaAction))
       }
 
-    const addClient = (clientId) => (this.clients = [...this.clients, clientId])
+    const addClient = (client) => (this.clients = [...this.clients, client])
     const getClients = () => this.clients
     
     return {
