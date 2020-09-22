@@ -8,7 +8,7 @@ Client applications that wish to utilise pipes will need to either follow the [T
 
 ## Installation
 
-```$> bash npm install @happycode/pipes ```
+```bash $>npm install @happycode/pipes ```
 
 ## Usage
 
