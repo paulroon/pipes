@@ -4,11 +4,11 @@
 
 Pipes is an express wrapper for nodejs that enables multiple web-servers and multiple client side apps to share a common state with automated real-time updates 
 
-Client applications that wish to utilise pipes will need to either follow the [TBD pipes-fe-socket-protocol] or implement [@happycoder/react-pipes the front end Library] library
+Client applications that wish to utilise pipes will need to either follow the [TBD pipes-fe-socket-protocol] or implement [@happy-code/react-pipes the front end Library] library
 
 ## Installation
 
-```bash $>npm install @happycode/pipes ```
+```bash $>npm install @happy-code/pipes ```
 
 ## Usage
 

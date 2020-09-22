@@ -1,5 +1,5 @@
 {
-  "name": "pipes",
+  "name": "@happy-code/pipes",
   "version": "1.0.0",
   "description": "Pipes is an express wrapper for nodejs that enables multi server/client side apps to share a common state and real-time updates.",
   "main": "index.js",
